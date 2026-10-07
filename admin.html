@@ -9,7 +9,7 @@ header{position:sticky;top:0;z-index:20;background:#000;border-bottom:4px solid 
 header h1{font-size:1.5rem}
 .btn{background:var(--b);color:#000;border:0;padding:11px 16px;font:400 1rem Anton;text-transform:uppercase;cursor:pointer;box-shadow:3px 3px 0 var(--a)}
 .btn.g{background:#222;color:#fff;box-shadow:none}.btn.r{background:var(--a);color:#fff;box-shadow:none}
-.tabs{display:flex;overflow-x:auto;background:#111;position:sticky;top:62px;z-index:19}.tabs button{flex:1 0 auto;padding:14px 16px;background:0;border:0;color:#999;font:400 1.05rem Anton;text-transform:uppercase;cursor:pointer;border-bottom:4px solid transparent}
+.tabs{display:flex;overflow-x:auto;background:#111;position:sticky;top:var(--hh,62px);z-index:19}.tabs button{flex:1 0 auto;padding:14px 16px;background:0;border:0;color:#999;font:400 1.05rem Anton;text-transform:uppercase;cursor:pointer;border-bottom:4px solid transparent}
 .tabs .on{color:var(--b);border-color:var(--b)}
 main{max-width:760px;margin:auto;padding:18px 4%}
 label{display:block;margin:14px 0 5px;color:#bbb;font-size:.85rem;font-weight:700}
@@ -23,12 +23,14 @@ textarea{min-height:110px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12
 .prev{width:100%;max-height:170px;object-fit:cover;margin-top:8px;display:block}
 #M{position:fixed;inset:0;background:#000e;display:none;z-index:100;align-items:flex-start;justify-content:center;overflow:auto;padding:14px}#M.on{display:flex}
 .box{background:#101010;border:2px solid var(--a);width:100%;max-width:560px;padding:18px;box-shadow:8px 8px 0 var(--b);margin:auto}
-.box.pv{max-width:1000px;height:92vh;padding:8px;display:flex;flex-direction:column}.pv iframe{flex:1;border:0;background:#000}
+.box.pv{max-width:1000px;height:92vh;height:92dvh;padding:8px;display:flex;flex-direction:column}.pv iframe{flex:1;border:0;background:#000}
 .bar{display:flex;gap:10px;margin-top:20px}.bar .btn{flex:1}
 #login{position:fixed;inset:0;background:#000;z-index:300;display:grid;place-items:center;padding:20px;text-align:center}
 #login h1{font-size:4rem;text-shadow:3px 0 var(--a),-3px 0 var(--b)}
 .pre{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}.pre i{width:52px;height:34px;border:2px solid #444;cursor:pointer}
 .pg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.pg div{position:relative}.pg img{width:100%;aspect-ratio:1;object-fit:cover;display:block}.pg .btn{position:absolute;top:4px;right:4px;padding:5px 9px}
+input,textarea,select{font-size:16px;min-width:0;max-width:100%}html{-webkit-text-size-adjust:100%}.btn{touch-action:manipulation}
+@media(max-width:600px){header h1{font-size:1.15rem}header .btn{padding:9px 12px;font-size:.9rem}main{padding:14px 4%}.it{gap:8px;padding:8px}.it .btn{padding:8px 11px}.it img,.it .t{width:50px;height:50px}.row{gap:8px}#M{padding:8px}.box{padding:14px}.box.pv{padding:6px;height:94dvh}.tabs button{padding:13px 14px;font-size:.95rem}#login h1{font-size:3.2rem}}
 #toast{position:fixed;bottom:20px;left:50%;translate:-50% 0;background:#1db954;color:#000;padding:12px 22px;font-weight:700;z-index:400;display:none}
 </style></head><body>
 <div id="login"><div style="max-width:320px;width:100%"><h1>zekiscc</h1><p style="color:#888;margin-bottom:16px">Panel de administrador</p><input id="pw" type="password" placeholder="Contraseña" style="text-align:center" onkeydown="if(event.key==='Enter')enter()"><button class="btn" style="width:100%;margin-top:12px" onclick="enter()">Entrar</button></div></div>
@@ -40,7 +42,7 @@ textarea{min-height:110px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {getDatabase,ref,onValue,set,push,remove} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 const db=getDatabase(initializeApp({apiKey:"AIzaSyCuHSlv7WEmoEWh96rWWCnTi7AwgN-7Hd4",authDomain:"tatuajes-e7c8f.firebaseapp.com",databaseURL:"https://tatuajes-e7c8f-default-rtdb.firebaseio.com/",projectId:"tatuajes-e7c8f"}));
-const R='ZEKISCCS',PASS='zekiscc1234'; // <-- CAMBIA LA CONTRASEÑA AQUÍ
+const R='ZEKISCC',PASS='zekiscc1234'; // <-- CAMBIA LA CONTRASEÑA AQUÍ
 const $=i=>document.getElementById(i);let D={config:{},songs:{},albums:{},photos:{},videos:{},shows:{}},tab='cfg',pic={};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const toast=t=>{const e=$('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',2000)};
@@ -48,7 +50,7 @@ window.enter=()=>{if($('pw').value===PASS){sessionStorage.z=1;$('login').hidden=
 if(sessionStorage.z)$('login').hidden=true;
 // Modales con botón "atrás" del celular
 const S=[];const M=$('M');
-const sh=()=>{const h=S[S.length-1];M.classList.toggle('on',!!h);M.innerHTML=h||''};
+const sh=()=>{const h=S[S.length-1];M.classList.toggle('on',!!h);document.body.style.overflow=h?'hidden':'';M.innerHTML=h||''};
 const open=h=>{S.push(h);history.pushState(1,'');sh()};
 addEventListener('popstate',()=>{S.pop();sh()});
 window.back=()=>history.back();
@@ -60,7 +62,7 @@ const F=[['name','Nombre artístico'],['tag','Etiqueta sobre el nombre'],['sloga
 const PRE=[['#e1002d','#f4f4f4'],['#00cfff','#ffffff'],['#d4af37','#ffffff'],['#ff5a00','#ffe9d6'],['#ff2e88','#00e5ff'],['#ffffff','#e1002d']];
 const alb=()=>Object.entries(D.albums);
 const songs=()=>Object.entries(D.songs).map(([id,s])=>({id,...s})).sort((a,b)=>(b.date||0)-(a.date||0));
-function draw(){const c=D.config;document.documentElement.style.setProperty('--a',c.cA||'#e1002d');document.documentElement.style.setProperty('--b',c.cB||'#f4f4f4');
+function draw(){document.documentElement.style.setProperty('--hh',document.querySelector('header').offsetHeight+'px');const c=D.config;document.documentElement.style.setProperty('--a',c.cA||'#e1002d');document.documentElement.style.setProperty('--b',c.cB||'#f4f4f4');
 document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));let h='';
 if(tab==='cfg'){h=`<p style="background:#151515;padding:12px;border-left:5px solid var(--b)">👁 Visitas a la página: <b>${D.views||0}</b></p><h2 style="margin-top:12px">Textos y colores</h2>`+F.map(([k,l,t])=>`<label>${l}</label>${t==='t'?`<textarea data-k="${k}">${esc(c[k])}</textarea>`:`<input ${t==='d'?'type="datetime-local" ':''}data-k="${k}" value="${esc(c[k])}" placeholder="(usa el texto por defecto)">`}`).join('')+
 `<label>Colores (rudos)</label><div class="row"><input type="color" id="cA" value="${c.cA||'#e1002d'}"><input type="color" id="cB" value="${c.cB||'#f4f4f4'}"></div><div class="pre">${PRE.map(p=>`<i style="background:linear-gradient(90deg,${p[0]} 50%,${p[1]} 50%)" onclick="cl('${p[0]}','${p[1]}')"></i>`).join('')}</div>
@@ -92,9 +94,9 @@ window.addPhotos=async i=>{toast('Subiendo...');for(const f of i.files){await se
 window.editShow=()=>open(`<div class="box"><h2>Nueva fecha</h2><label>Fecha *</label><input type="date" id="s_d"><label>Ciudad *</label><input id="s_c"><label>Lugar (opcional)</label><input id="s_v"><label>Link de entradas (opcional)</label><input id="s_l"><div class="bar"><button class="btn g" onclick="back()">Cancelar</button><button class="btn" onclick="saveShow()">Guardar</button></div></div>`);
 window.saveShow=async()=>{const d=$('s_d').value,c=$('s_c').value.trim();if(!d||!c)return alert('Falta fecha o ciudad');await set(push(ref(db,R+'/shows')),{date:d,city:c,venue:$('s_v').value.trim(),link:$('s_l').value.trim()});back();toast('✔ Fecha guardada')};
 window.saveTrack=async()=>{const f=$('tf').files[0],t=$('tt').value.trim()||'Mi canción';if(!f&&!D.track)return alert('Elige un MP3');
-if(f){if(f.size>6e6)return alert('Pesa más de 6 MB. Exporta el MP3 a 128 kbps.');toast('Subiendo canción...');const d=await new Promise(r=>{const x=new FileReader();x.onload=()=>r(x.result);x.readAsDataURL(f)});await set(ref(db,'ZEKISCCS_audio/data'),d)}
+if(f){if(f.size>6e6)return alert('Pesa más de 6 MB. Exporta el MP3 a 128 kbps.');toast('Subiendo canción...');const d=await new Promise(r=>{const x=new FileReader();x.onload=()=>r(x.result);x.readAsDataURL(f)});await set(ref(db,'ZEKISCC_audio/data'),d)}
 await set(ref(db,R+'/track'),{title:t,size:f?f.size:D.track.size});toast('✔ Canción guardada')};
-window.delTrack=async()=>{if(confirm('¿Quitar la canción?')){await remove(ref(db,R+'/track'));await remove(ref(db,'ZEKISCCS_audio'));toast('Quitada')}};
+window.delTrack=async()=>{if(confirm('¿Quitar la canción?')){await remove(ref(db,R+'/track'));await remove(ref(db,'ZEKISCC_audio'));toast('Quitada')}};
 window.del=async(k,id)=>{if(confirm('¿Eliminar? No se puede deshacer.')){await remove(ref(db,`${R}/${k}/${id}`));toast('Eliminado')}};
 window.preview=()=>open(`<div class="box pv"><div style="display:flex;gap:8px;margin-bottom:8px"><button class="btn g" onclick="back()">← Volver al panel</button><button class="btn" onclick="document.getElementById('pf').src='index.html?'+Date.now()">↻ Recargar</button></div><iframe id="pf" src="index.html?${Date.now()}"></iframe></div>`);
 onValue(ref(db,R),s=>{D={config:{},songs:{},albums:{},photos:{},videos:{},shows:{},...s.val()};if(!S.length||true)draw()});
