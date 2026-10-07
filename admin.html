@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><title>ZEKI · Admin</title>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><title>zekiscc · Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{--a:#e1002d;--b:#f4f4f4}*{box-sizing:border-box;margin:0;padding:0}
@@ -31,8 +31,8 @@ textarea{min-height:110px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12
 .pg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.pg div{position:relative}.pg img{width:100%;aspect-ratio:1;object-fit:cover;display:block}.pg .btn{position:absolute;top:4px;right:4px;padding:5px 9px}
 #toast{position:fixed;bottom:20px;left:50%;translate:-50% 0;background:#1db954;color:#000;padding:12px 22px;font-weight:700;z-index:400;display:none}
 </style></head><body>
-<div id="login"><div style="max-width:320px;width:100%"><h1>ZEKI</h1><p style="color:#888;margin-bottom:16px">Panel de administrador</p><input id="pw" type="password" placeholder="Contraseña" style="text-align:center" onkeydown="if(event.key==='Enter')enter()"><button class="btn" style="width:100%;margin-top:12px" onclick="enter()">Entrar</button></div></div>
-<header><h1>Panel · <span style="color:var(--b)">ZEKI</span></h1><button class="btn" onclick="preview()">👁 Ver página</button></header>
+<div id="login"><div style="max-width:320px;width:100%"><h1>zekiscc</h1><p style="color:#888;margin-bottom:16px">Panel de administrador</p><input id="pw" type="password" placeholder="Contraseña" style="text-align:center" onkeydown="if(event.key==='Enter')enter()"><button class="btn" style="width:100%;margin-top:12px" onclick="enter()">Entrar</button></div></div>
+<header><h1>Panel · <span style="color:var(--b)">zekiscc</span></h1><button class="btn" onclick="preview()">👁 Ver página</button></header>
 <div class="tabs"><button data-t="cfg" class="on">Página</button><button data-t="songs">Temas</button><button data-t="track">Canción</button><button data-t="albums">Álbumes</button><button data-t="videos">Videos</button><button data-t="photos">Fotos</button><button data-t="shows">Shows</button></div>
 <main id="main"></main>
 <div id="M"></div><div id="toast"></div>
@@ -40,7 +40,7 @@ textarea{min-height:110px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {getDatabase,ref,onValue,set,push,remove} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 const db=getDatabase(initializeApp({apiKey:"AIzaSyCuHSlv7WEmoEWh96rWWCnTi7AwgN-7Hd4",authDomain:"tatuajes-e7c8f.firebaseapp.com",databaseURL:"https://tatuajes-e7c8f-default-rtdb.firebaseio.com/",projectId:"tatuajes-e7c8f"}));
-const R='zekiscc',PASS='zeki1234'; // <-- CAMBIA LA CONTRASEÑA AQUÍ
+const R='zekisccscc',PASS='zekiscc1234'; // <-- CAMBIA LA CONTRASEÑA AQUÍ
 const $=i=>document.getElementById(i);let D={config:{},songs:{},albums:{},photos:{},videos:{},shows:{}},tab='cfg',pic={};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const toast=t=>{const e=$('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',2000)};
@@ -92,9 +92,9 @@ window.addPhotos=async i=>{toast('Subiendo...');for(const f of i.files){await se
 window.editShow=()=>open(`<div class="box"><h2>Nueva fecha</h2><label>Fecha *</label><input type="date" id="s_d"><label>Ciudad *</label><input id="s_c"><label>Lugar (opcional)</label><input id="s_v"><label>Link de entradas (opcional)</label><input id="s_l"><div class="bar"><button class="btn g" onclick="back()">Cancelar</button><button class="btn" onclick="saveShow()">Guardar</button></div></div>`);
 window.saveShow=async()=>{const d=$('s_d').value,c=$('s_c').value.trim();if(!d||!c)return alert('Falta fecha o ciudad');await set(push(ref(db,R+'/shows')),{date:d,city:c,venue:$('s_v').value.trim(),link:$('s_l').value.trim()});back();toast('✔ Fecha guardada')};
 window.saveTrack=async()=>{const f=$('tf').files[0],t=$('tt').value.trim()||'Mi canción';if(!f&&!D.track)return alert('Elige un MP3');
-if(f){if(f.size>6e6)return alert('Pesa más de 6 MB. Exporta el MP3 a 128 kbps.');toast('Subiendo canción...');const d=await new Promise(r=>{const x=new FileReader();x.onload=()=>r(x.result);x.readAsDataURL(f)});await set(ref(db,'zekiscc_audio/data'),d)}
+if(f){if(f.size>6e6)return alert('Pesa más de 6 MB. Exporta el MP3 a 128 kbps.');toast('Subiendo canción...');const d=await new Promise(r=>{const x=new FileReader();x.onload=()=>r(x.result);x.readAsDataURL(f)});await set(ref(db,'zekisccscc_audio/data'),d)}
 await set(ref(db,R+'/track'),{title:t,size:f?f.size:D.track.size});toast('✔ Canción guardada')};
-window.delTrack=async()=>{if(confirm('¿Quitar la canción?')){await remove(ref(db,R+'/track'));await remove(ref(db,'zekiscc_audio'));toast('Quitada')}};
+window.delTrack=async()=>{if(confirm('¿Quitar la canción?')){await remove(ref(db,R+'/track'));await remove(ref(db,'zekisccscc_audio'));toast('Quitada')}};
 window.del=async(k,id)=>{if(confirm('¿Eliminar? No se puede deshacer.')){await remove(ref(db,`${R}/${k}/${id}`));toast('Eliminado')}};
 window.preview=()=>open(`<div class="box pv"><div style="display:flex;gap:8px;margin-bottom:8px"><button class="btn g" onclick="back()">← Volver al panel</button><button class="btn" onclick="document.getElementById('pf').src='index.html?'+Date.now()">↻ Recargar</button></div><iframe id="pf" src="index.html?${Date.now()}"></iframe></div>`);
 onValue(ref(db,R),s=>{D={config:{},songs:{},albums:{},photos:{},videos:{},shows:{},...s.val()};if(!S.length||true)draw()});
