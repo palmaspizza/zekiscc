@@ -40,7 +40,7 @@ textarea{min-height:110px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {getDatabase,ref,onValue,set,push,remove} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 const db=getDatabase(initializeApp({apiKey:"AIzaSyCuHSlv7WEmoEWh96rWWCnTi7AwgN-7Hd4",authDomain:"tatuajes-e7c8f.firebaseapp.com",databaseURL:"https://tatuajes-e7c8f-default-rtdb.firebaseio.com/",projectId:"tatuajes-e7c8f"}));
-const R='zekisccscc',PASS='zekiscc1234'; // <-- CAMBIA LA CONTRASEÑA AQUÍ
+const R='ZEKISCCS',PASS='zekiscc1234'; // <-- CAMBIA LA CONTRASEÑA AQUÍ
 const $=i=>document.getElementById(i);let D={config:{},songs:{},albums:{},photos:{},videos:{},shows:{}},tab='cfg',pic={};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const toast=t=>{const e=$('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',2000)};
@@ -92,9 +92,9 @@ window.addPhotos=async i=>{toast('Subiendo...');for(const f of i.files){await se
 window.editShow=()=>open(`<div class="box"><h2>Nueva fecha</h2><label>Fecha *</label><input type="date" id="s_d"><label>Ciudad *</label><input id="s_c"><label>Lugar (opcional)</label><input id="s_v"><label>Link de entradas (opcional)</label><input id="s_l"><div class="bar"><button class="btn g" onclick="back()">Cancelar</button><button class="btn" onclick="saveShow()">Guardar</button></div></div>`);
 window.saveShow=async()=>{const d=$('s_d').value,c=$('s_c').value.trim();if(!d||!c)return alert('Falta fecha o ciudad');await set(push(ref(db,R+'/shows')),{date:d,city:c,venue:$('s_v').value.trim(),link:$('s_l').value.trim()});back();toast('✔ Fecha guardada')};
 window.saveTrack=async()=>{const f=$('tf').files[0],t=$('tt').value.trim()||'Mi canción';if(!f&&!D.track)return alert('Elige un MP3');
-if(f){if(f.size>6e6)return alert('Pesa más de 6 MB. Exporta el MP3 a 128 kbps.');toast('Subiendo canción...');const d=await new Promise(r=>{const x=new FileReader();x.onload=()=>r(x.result);x.readAsDataURL(f)});await set(ref(db,'zekisccscc_audio/data'),d)}
+if(f){if(f.size>6e6)return alert('Pesa más de 6 MB. Exporta el MP3 a 128 kbps.');toast('Subiendo canción...');const d=await new Promise(r=>{const x=new FileReader();x.onload=()=>r(x.result);x.readAsDataURL(f)});await set(ref(db,'ZEKISCCS_audio/data'),d)}
 await set(ref(db,R+'/track'),{title:t,size:f?f.size:D.track.size});toast('✔ Canción guardada')};
-window.delTrack=async()=>{if(confirm('¿Quitar la canción?')){await remove(ref(db,R+'/track'));await remove(ref(db,'zekisccscc_audio'));toast('Quitada')}};
+window.delTrack=async()=>{if(confirm('¿Quitar la canción?')){await remove(ref(db,R+'/track'));await remove(ref(db,'ZEKISCCS_audio'));toast('Quitada')}};
 window.del=async(k,id)=>{if(confirm('¿Eliminar? No se puede deshacer.')){await remove(ref(db,`${R}/${k}/${id}`));toast('Eliminado')}};
 window.preview=()=>open(`<div class="box pv"><div style="display:flex;gap:8px;margin-bottom:8px"><button class="btn g" onclick="back()">← Volver al panel</button><button class="btn" onclick="document.getElementById('pf').src='index.html?'+Date.now()">↻ Recargar</button></div><iframe id="pf" src="index.html?${Date.now()}"></iframe></div>`);
 onValue(ref(db,R),s=>{D={config:{},songs:{},albums:{},photos:{},videos:{},shows:{},...s.val()};if(!S.length||true)draw()});
