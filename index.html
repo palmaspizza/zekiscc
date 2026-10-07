@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#000"><title>ZEKI</title>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#000"><title>ZEKISCC</title>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{--a:#e1002d;--b:#f4f4f4;--sy:0}
@@ -135,7 +135,7 @@ footer .pill{margin:0 5px 12px}
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {getDatabase,ref,onValue,get,runTransaction} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 const db=getDatabase(initializeApp({apiKey:"AIzaSyCuHSlv7WEmoEWh96rWWCnTi7AwgN-7Hd4",authDomain:"tatuajes-e7c8f.firebaseapp.com",databaseURL:"https://tatuajes-e7c8f-default-rtdb.firebaseio.com/",projectId:"tatuajes-e7c8f"}));
-const C0={name:'ZEKI',tag:'Nuevo en la calle',slogan:"Del barrio pa' el mundo.",btn:'Escucha lo último',mq:'ZEKISCC • REGGAETON • TRAP • CALLE',latestT:'Último lanzamiento',songsT:'Temas',albumsT:'Álbumes',aboutT:'Quién es',aboutX:'',ig:'zekiscc',wa:'',foot:'Hecho en la calle.',videosT:'Videoclips',galleryT:'Fotos',showsT:'Próximos shows',tiktok:'',email:'',cdT:'Nuevo tema en',cdD:'',portrait:'',cA:'#e1002d',cB:'#f4f4f4',hero:''};
+const C0={name:'ZEKISCC',tag:'Nuevo en la calle',slogan:"Del barrio pa' el mundo.",btn:'Escucha lo último',mq:'ZEKISCCSCC • REGGAETON • TRAP • CALLE',latestT:'Último lanzamiento',songsT:'Temas',albumsT:'Álbumes',aboutT:'Quién es',aboutX:'',ig:'ZEKISCCscc',wa:'',foot:'Hecho en la calle.',videosT:'Videoclips',galleryT:'Fotos',showsT:'Próximos shows',tiktok:'',email:'',cdT:'Nuevo tema en',cdD:'',portrait:'',cA:'#e1002d',cB:'#f4f4f4',hero:''};
 let D={config:{},songs:{},albums:{},photos:{},videos:{},shows:{}};const $=i=>document.getElementById(i);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ic=n=>`<svg class="ic"><use href="#i-${n}"/></svg>`;
@@ -192,7 +192,7 @@ $('cdn').innerHTML=[Math.floor(x/864e5),Math.floor(x/36e5)%24,Math.floor(x/6e4)%
 setInterval(tick,1000);
 const au=window.au=new Audio();let ctx,ana,fq,raf,ld=0;
 const fm=s=>isFinite(s)?Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,0):'0:00';
-$('pb').onclick=async()=>{if(!ld){$('ptm').textContent='cargando...';const s=await get(ref(db,'zekiscc_audio/data'));if(!s.exists()){$('ptm').textContent='';return}au.src=s.val();ld=1;$('ptm').textContent=''}
+$('pb').onclick=async()=>{if(!ld){$('ptm').textContent='cargando...';const s=await get(ref(db,'ZEKISCCscc_audio/data'));if(!s.exists()){$('ptm').textContent='';return}au.src=s.val();ld=1;$('ptm').textContent=''}
 if(!ctx){ctx=new(window.AudioContext||window.webkitAudioContext)();const sr=ctx.createMediaElementSource(au);ana=ctx.createAnalyser();ana.fftSize=128;sr.connect(ana);ana.connect(ctx.destination);fq=new Uint8Array(ana.frequencyBinCount)}
 await ctx.resume();au.paused?au.play():au.pause()};
 au.onplay=au.onpause=au.onended=()=>{$('pb').innerHTML=ic(au.paused?'play':'ps');if(!au.paused)viz()};
@@ -200,11 +200,11 @@ au.ontimeupdate=()=>{$('sk').value=au.duration?au.currentTime/au.duration*1000:0
 $('sk').oninput=e=>{if(au.duration)au.currentTime=e.target.value/1000*au.duration};
 const cv=$('vz'),g=cv.getContext('2d');
 function viz(){cancelAnimationFrame(raf);const f=()=>{ana.getByteFrequencyData(fq);g.clearRect(0,0,cv.width,cv.height);const w=cv.width/fq.length,col=getComputedStyle(document.documentElement).getPropertyValue('--a');fq.forEach((v,i)=>{const h=Math.max(3,v/255*cv.height);g.fillStyle=i%2?col:'#fff';g.fillRect(i*w+1,cv.height-h,w-3,h)});if(!au.paused)raf=requestAnimationFrame(f)};f()}
-try{if(!location.search&&!sessionStorage.v){sessionStorage.v=1;runTransaction(ref(db,'zekiscc/views'),n=>(n||0)+1).catch(()=>{})}}catch(e){}
+try{if(!location.search&&!sessionStorage.v){sessionStorage.v=1;runTransaction(ref(db,'ZEKISCCscc/views'),n=>(n||0)+1).catch(()=>{})}}catch(e){}
 addEventListener('scroll',()=>{r(scrollY);$('bar').classList.toggle('on',!!window.lastId&&scrollY>innerHeight*.8&&!S.length)},{passive:true});
 const r=y=>document.documentElement.style.setProperty('--sy',y);
 document.addEventListener('pointermove',e=>{const c=e.target.closest?.('.tl');if(!c||e.pointerType!=='mouse')return;const b=c.getBoundingClientRect();c.style.setProperty('--ry',((e.clientX-b.left)/b.width-.5)*14+'deg');c.style.setProperty('--rx',-((e.clientY-b.top)/b.height-.5)*14+'deg')});
 document.addEventListener('pointerout',e=>{const c=e.target.closest?.('.tl');if(c){c.style.removeProperty('--rx');c.style.removeProperty('--ry')}});
-onValue(ref(db,'zekiscc'),s=>{D={config:{},songs:{},albums:{},photos:{},videos:{},shows:{},...s.val()};render();setTimeout(()=>$('ld').classList.add('off'),900)});
+onValue(ref(db,'ZEKISCCscc'),s=>{D={config:{},songs:{},albums:{},photos:{},videos:{},shows:{},...s.val()};render();setTimeout(()=>$('ld').classList.add('off'),900)});
 setTimeout(()=>$('ld').classList.add('off'),3500);
 </script></body></html>
