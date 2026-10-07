@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#000"><title>ZEKISCC</title>
+<link rel="preconnect" href="https://res.cloudinary.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  <!-- Open Graph / WhatsApp / Facebook / Instagram -->
+<!-- Open Graph / WhatsApp / Facebook / Instagram -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://zekiscc.pages.dev/">
 <meta property="og:title" content="ZEKISCC | Música Oficial">
@@ -20,8 +21,7 @@
 
 <!-- Meta etiquetas adicionales de personalización -->
 <meta name="theme-color" content="#e1002d">
-<meta name="description" content="Sitio web oficial de ZEKISCC. Reggaeton, Trap y música urbana. Del barrio pa' el mundo.">
-<style>
+<meta name="description" content="Sitio web oficial de ZEKISCC. Reggaeton, Trap y música urbana. Del barrio pa' el mundo."><style>
 :root{--a:#e1002d;--b:#f4f4f4;--sy:0}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}html{scroll-behavior:smooth}
 body{background:#030303;color:#fff;font:500 1rem 'Space Grotesk',Arial,sans-serif;overflow-x:hidden}
@@ -180,7 +180,8 @@ const C0={name:'ZEKISCC',tag:'Nuevo en la calle',slogan:"Del barrio pa' el mundo
 let D={config:{},songs:{},albums:{},photos:{},videos:{},shows:{}};const $=i=>document.getElementById(i);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ic=n=>`<svg class="ic"><use href="#i-${n}"/></svg>`;
-const cov=s=>s.cover||(s.yt?`https://i.ytimg.com/vi/${s.yt}/hqdefault.jpg`:'');
+const cl=(u,w)=>u&&u.includes('res.cloudinary.com/')?u.replace('/upload/',`/upload/f_auto,q_auto,w_${w},c_limit/`):u;
+const cov=s=>s.cover?cl(s.cover,800):(s.yt?`https://i.ytimg.com/vi/${s.yt}/hqdefault.jpg`:'');
 const img=(s,n)=>{const c=cov(s);return c?`<img loading="lazy" src="${esc(c)}" alt="">`:`<div class="ph">${esc((n||s.title||'♪')[0])}</div>`};
 const an=s=>D.albums[s.album]?.name||'Sencillo';
 const songs=()=>Object.entries(D.songs).map(([id,s])=>({id,...s})).sort((x,y)=>(y.date||0)-(x.date||0));
@@ -195,7 +196,7 @@ const k=(u,c,i,t)=>u?`<a class="bt ${c}" href="${esc(u)}" target="_blank" rel="n
 const b=k(s.spotify,'sp','sp','Spotify')+k(s.soundcloud,'sc','sc','SoundCloud')+k(s.yt&&'https://youtu.be/'+s.yt,'yt','yt','YouTube');
 open(`${v}<h2>${esc(s.title)}</h2><p style="color:#999">${esc(an(s))}</p><div class="bts">${b||'<p>Muy pronto en plataformas.</p>'}</div><button class="bt sh" onclick="share('${esc(s.title).replace(/'/g,'')}')">${ic('sh')}Compartir</button>`)};
 window.album=id=>{const a=D.albums[id],t=songs().filter(s=>s.album===id).reverse();
-open(`${a.cover?`<img class="cv" src="${esc(a.cover)}" alt="">`:''}<h2>${esc(a.name)}</h2><p style="color:#999;margin-bottom:10px">${esc(a.year||'')}</p>${t.map((s,i)=>`<div class="trk" onclick="song('${s.id}')"><span>${i+1}. ${esc(s.title)}</span>${ic('play')}</div>`).join('')||'<p>Sin temas todavía.</p>'}`)};
+open(`${a.cover?`<img class="cv" src="${esc(cl(a.cover,800))}" alt="">`:''}<h2>${esc(a.name)}</h2><p style="color:#999;margin-bottom:10px">${esc(a.year||'')}</p>${t.map((s,i)=>`<div class="trk" onclick="song('${s.id}')"><span>${i+1}. ${esc(s.title)}</span>${ic('play')}</div>`).join('')||'<p>Sin temas todavía.</p>'}`)};
 window.share=t=>navigator.share?navigator.share({title:t,url:location.href}).catch(()=>{}):navigator.clipboard.writeText(location.href).then(()=>alert('Link copiado'));
 const io=new IntersectionObserver(e=>e.forEach(x=>x.isIntersecting&&x.target.classList.add('v')),{threshold:.08});
 window.render=()=>{const c={...C0,...D.config},q=$('q').value.toLowerCase(),all=songs(),r=document.documentElement.style;
@@ -203,8 +204,8 @@ r.setProperty('--a',c.cA);r.setProperty('--b',c.cB);document.title=c.name+' | M�
 $('nm').textContent=$('lg').textContent=$('ldn').textContent=$('fn').textContent=c.name;$('nm').dataset.t=c.name;const nl=Math.max(4,c.name.length);$('nm').style.fontSize=`min(${Math.min(27,170/nl).toFixed(1)}vw,15rem)`;$('fn').style.fontSize=`min(${Math.min(32,200/nl).toFixed(1)}vw,18rem)`;$('ldn').style.fontSize=`min(${Math.min(18,110/nl).toFixed(1)}vw,9rem)`;
 $('tag').innerHTML=`<span class="eq"><i></i><i></i><i></i><i></i></span>${esc(c.tag)}`;$('sl').textContent=c.slogan;$('btn').textContent=c.btn;
 $('stt').textContent=(c.name+' ✦ ').repeat(4).slice(0,44);
-$('st').textContent=c.songsT;$('at').textContent=c.albumsT;$('abt').textContent=c.aboutT;$('abx').textContent=c.aboutX;$('pt').src=c.portrait||'';$('pt').hidden=!c.portrait;$('abw').classList.toggle('p',!!c.portrait);$('about').hidden=!c.aboutX&&!c.portrait;$('ft').textContent=c.foot;
-$('hero').style.backgroundImage=c.hero?`linear-gradient(#0003,#030303 96%),url("${c.hero}")`:'';
+$('st').textContent=c.songsT;$('at').textContent=c.albumsT;$('abt').textContent=c.aboutT;$('abx').textContent=c.aboutX;$('pt').src=cl(c.portrait,800)||'';$('pt').hidden=!c.portrait;$('abw').classList.toggle('p',!!c.portrait);$('about').hidden=!c.aboutX&&!c.portrait;$('ft').textContent=c.foot;
+$('hero').style.backgroundImage=c.hero?`linear-gradient(#0003,#030303 96%),url("${cl(c.hero,innerWidth<700?900:1800)}")`:'';
 const h=c.ig.replace('@','');$('ign').href=$('ig2').href='https://instagram.com/'+h;$('igt').textContent=$('ig2t').textContent='@'+h;
 const w=String(c.wa||'').replace(/\D/g,'');$('wa').hidden=!w;if(w)$('wa').href='https://wa.me/'+w;
 const it=c.mq.split(/[•|·]/).map(x=>x.trim()).filter(Boolean),m=it.map(x=>`<span>${esc(x)}</span>${ic('st').replace('class="ic"','class="ic st"')}`).join('').repeat(Math.ceil(10/it.length));document.querySelectorAll('.m').forEach(e=>e.innerHTML=m+m);
@@ -214,26 +215,26 @@ $('cta').onclick=()=>song(f.id);$('bt').textContent='▶ '+f.title}else $('cta')
 const l=all.filter(s=>s.title.toLowerCase().includes(q));
 $('gs').innerHTML=l.map((s,i)=>`<div class="card tl" onclick="song('${s.id}')"><div class="im">${i===0&&!q?'<span class="new">NUEVO</span>':''}${img(s)}<div class="pl">${ic('play')}</div></div><h3>${esc(s.title)}</h3><p>${esc(an(s))}</p></div>`).join('')||'<p>Muy pronto. Los temas caen acá.</p>';
 const al=Object.entries(D.albums);$('alb').hidden=!al.length;
-$('ga').innerHTML=al.map(([id,a])=>`<div class="card tl" onclick="album('${id}')"><div class="im">${a.cover?`<img loading="lazy" src="${esc(a.cover)}" alt="">`:`<div class="ph">${esc(a.name[0])}</div>`}</div><h3>${esc(a.name)}</h3><p>${esc(a.year||'')}</p></div>`).join('');
+$('ga').innerHTML=al.map(([id,a])=>`<div class="card tl" onclick="album('${id}')"><div class="im">${a.cover?`<img loading="lazy" src="${esc(cl(a.cover,800))}" alt="">`:`<div class="ph">${esc(a.name[0])}</div>`}</div><h3>${esc(a.name)}</h3><p>${esc(a.year||'')}</p></div>`).join('');
 $('vdT').textContent=c.videosT;$('glT').textContent=c.galleryT;$('swT').textContent=c.showsT;
 const V=Object.entries(D.videos).reverse();$('vd').hidden=!V.length;
 $('vg').innerHTML=V.map(([id,v])=>`<div class="card" onclick="vid('${id}')"><div class="im" style="aspect-ratio:16/9"><img loading="lazy" src="https://i.ytimg.com/vi/${esc(v.yt)}/hqdefault.jpg" alt=""><div class="pl">${ic('play')}</div></div><h3>${esc(v.title)}</h3></div>`).join('');
 const td=new Date().toISOString().slice(0,10),SH=Object.values(D.shows).filter(s=>s.date>=td).sort((a,b)=>a.date.localeCompare(b.date));$('sw').hidden=!SH.length;
 $('swl').innerHTML=SH.map(s=>{const d=new Date(s.date+'T12:00');return`<div class="show card"><div class="dt"><b>${d.getDate()}</b><span>${d.toLocaleString('es',{month:'short'})}</span></div><div class="si"><h3>${esc(s.city)}</h3><p>${ic('pn')} ${esc(s.venue||'')}</p></div>${s.link?`<a class="pill" href="${esc(s.link)}" target="_blank" rel="noopener">Entradas</a>`:''}</div>`}).join('');
 const P=Object.entries(D.photos).reverse();$('gl').hidden=!P.length;
-$('gll').innerHTML=P.map(([id,p])=>`<img class="card" loading="lazy" onclick="photo('${id}')" src="${esc(p.src)}" alt="">`).join('');
+$('gll').innerHTML=P.map(([id,p])=>`<img class="card" loading="lazy" onclick="photo('${id}')" src="${esc(cl(p.src,700))}" alt="">`).join('');
 const tk=String(c.tiktok||'').replace('@','');$('tkp').hidden=!tk;if(tk)$('tkp').href='https://tiktok.com/@'+tk;
 $('mlp').hidden=!c.email;if(c.email)$('mlp').href='mailto:'+c.email;
 tick();$('pl').hidden=!D.track;if(D.track)$('ptt').textContent=D.track.title;
 document.querySelectorAll('.card').forEach(e=>io.observe(e))};
 window.vid=id=>open(`<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/${esc(D.videos[id].yt)}?autoplay=1&rel=0" allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe></div><h2>${esc(D.videos[id].title)}</h2>`);
-window.photo=id=>open(`<img class="cv" style="aspect-ratio:auto;height:auto;margin:0" src="${esc(D.photos[id].src)}" alt="">`);
+window.photo=id=>open(`<img class="cv" style="aspect-ratio:auto;height:auto;margin:0" src="${esc(cl(D.photos[id].src,1400))}" alt="">`);
 const tick=()=>{const c={...C0,...D.config},x=new Date(c.cdD).getTime()-Date.now(),ok=c.cdD&&x>0;$('cd').hidden=!ok;if(!ok)return;$('cdt').textContent=c.cdT;
 $('cdn').innerHTML=[Math.floor(x/864e5),Math.floor(x/36e5)%24,Math.floor(x/6e4)%60,Math.floor(x/1e3)%60].map((n,i)=>`<div><b>${String(n).padStart(2,0)}</b><span>${['días','hrs','min','seg'][i]}</span></div>`).join('')};
 setInterval(tick,1000);
 const au=window.au=new Audio();let ctx,ana,fq,raf,ld=0;
 const fm=s=>isFinite(s)?Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,0):'0:00';
-$('pb').onclick=async()=>{if(!ld){$('ptm').textContent='cargando...';const s=await get(ref(db,'ZEKISCC_audio/data'));if(!s.exists()){$('ptm').textContent='';return}au.src=s.val();ld=1;$('ptm').textContent=''}
+$('pb').onclick=async()=>{if(!ld){$('ptm').textContent='cargando...';if(D.track?.url){au.crossOrigin='anonymous';au.src=D.track.url}else{const s=await get(ref(db,'ZEKISCC_audio/data'));if(!s.exists()){$('ptm').textContent='';return}au.src=s.val()}ld=1;$('ptm').textContent=''}
 if(!ctx){ctx=new(window.AudioContext||window.webkitAudioContext)();const sr=ctx.createMediaElementSource(au);ana=ctx.createAnalyser();ana.fftSize=128;sr.connect(ana);ana.connect(ctx.destination);fq=new Uint8Array(ana.frequencyBinCount)}
 await ctx.resume();au.paused?au.play():au.pause()};
 au.onplay=au.onpause=au.onended=()=>{$('pb').innerHTML=ic(au.paused?'play':'ps');if(!au.paused)viz()};
