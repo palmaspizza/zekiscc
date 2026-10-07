@@ -31,9 +31,10 @@ textarea{min-height:110px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12
 .pg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.pg div{position:relative}.pg img{width:100%;aspect-ratio:1;object-fit:cover;display:block}.pg .btn{position:absolute;top:4px;right:4px;padding:5px 9px}
 input,textarea,select{font-size:16px;min-width:0;max-width:100%}html{-webkit-text-size-adjust:100%}.btn{touch-action:manipulation}
 @media(max-width:600px){header h1{font-size:1.15rem}header .btn{padding:9px 12px;font-size:.9rem}main{padding:14px 4%}.it{gap:8px;padding:8px}.it .btn{padding:8px 11px}.it img,.it .t{width:50px;height:50px}.row{gap:8px}#M{padding:8px}.box{padding:14px}.box.pv{padding:6px;height:94dvh}.tabs button{padding:13px 14px;font-size:.95rem}#login h1{font-size:3.2rem}}
+[hidden]{display:none!important}
 #toast{position:fixed;bottom:20px;left:50%;translate:-50% 0;background:#1db954;color:#000;padding:12px 22px;font-weight:700;z-index:400;display:none}
 </style></head><body>
-<div id="login"><div style="max-width:320px;width:100%"><h1>zekiscc</h1><p style="color:#888;margin-bottom:16px">Panel de administrador</p><input id="pw" type="password" placeholder="Contraseña" style="text-align:center" onkeydown="if(event.key==='Enter')enter()"><button class="btn" style="width:100%;margin-top:12px" onclick="enter()">Entrar</button></div></div>
+<div id="login"><div style="max-width:320px;width:100%"><h1>zekiscc</h1><p style="color:#888;margin-bottom:16px">Panel de administrador</p><input id="pw" type="password" autocapitalize="off" autocorrect="off" autocomplete="current-password" placeholder="Contraseña" style="text-align:center" onkeydown="if(event.key==='Enter')enter()"><button class="btn" style="width:100%;margin-top:12px" onclick="enter()">Entrar</button></div></div>
 <header><h1>Panel · <span style="color:var(--b)">zekiscc</span></h1><button class="btn" onclick="preview()">👁 Ver página</button></header>
 <div class="tabs"><button data-t="cfg" class="on">Página</button><button data-t="songs">Temas</button><button data-t="track">Canción</button><button data-t="albums">Álbumes</button><button data-t="videos">Videos</button><button data-t="photos">Fotos</button><button data-t="shows">Shows</button></div>
 <main id="main"></main>
@@ -46,7 +47,7 @@ const R='ZEKISCC',PASS='zekiscc1234'; // <-- CAMBIA LA CONTRASEÑA AQUÍ
 const $=i=>document.getElementById(i);let D={config:{},songs:{},albums:{},photos:{},videos:{},shows:{}},tab='cfg',pic={};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const toast=t=>{const e=$('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',2000)};
-window.enter=()=>{if($('pw').value===PASS){sessionStorage.z=1;$('login').hidden=true}else{$('pw').value='';$('pw').placeholder='Incorrecta'}};
+window.enter=()=>{if($('pw').value.trim()===PASS){sessionStorage.z=1;$('login').hidden=true}else{$('pw').value='';$('pw').placeholder='Incorrecta'}};
 if(sessionStorage.z)$('login').hidden=true;
 // Modales con botón "atrás" del celular
 const S=[];const M=$('M');
