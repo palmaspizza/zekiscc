@@ -171,8 +171,7 @@ footer{padding:40px 5% calc(110px + env(safe-area-inset-bottom))}
 <section id="about"><h2 id="abt"></h2><div class="abw" id="abw"><img id="pt" alt="" hidden><p id="abx"></p></div></section>
 <footer><div class="fn big" id="fn"></div><a id="ig2" class="pill" target="_blank" rel="noopener"><svg class="ic"><use href="#i-ig"/></svg><span id="ig2t"></span></a><a id="tkp" class="pill" target="_blank" rel="noopener" hidden><svg class="ic"><use href="#i-tk"/></svg>TikTok</a><a id="mlp" class="pill" hidden><svg class="ic"><use href="#i-ml"/></svg>Contacto</a><a class="pill" href="javascript:share(document.title)"><svg class="ic"><use href="#i-sh"/></svg>Compartir</a><a class="dev" href="https://wa.me/56954998792" target="_blank" rel="noopener">
   <span>Hecho por</span>
-  <img src="logopalmacodescredits
-  .png" alt="Palma Codes" loading="lazy">
+  <img src="logopalmacodes.png" alt="Palma Codes" loading="lazy">
   <b>Palma Codes · Desarrollador</b>
   <em>Contactar</em>
 </a></footer>
@@ -210,7 +209,7 @@ r.setProperty('--a',c.cA);r.setProperty('--b',c.cB);document.title=c.name+' | M�
 $('nm').textContent=$('lg').textContent=$('ldn').textContent=$('fn').textContent=c.name;$('nm').dataset.t=c.name;const nl=Math.max(4,c.name.length);$('nm').style.fontSize=`min(${Math.min(27,170/nl).toFixed(1)}vw,15rem)`;$('fn').style.fontSize=`min(${Math.min(32,200/nl).toFixed(1)}vw,18rem)`;$('ldn').style.fontSize=`min(${Math.min(18,110/nl).toFixed(1)}vw,9rem)`;
 $('tag').innerHTML=`<span class="eq"><i></i><i></i><i></i><i></i></span>${esc(c.tag)}`;$('sl').textContent=c.slogan;$('btn').textContent=c.btn;
 $('stt').textContent=(c.name+' ✦ ').repeat(4).slice(0,44);
-$('st').textContent=c.songsT;$('at').textContent=c.albumsT;$('abt').textContent=c.aboutT;$('abx').textContent=c.aboutX;$('pt').src=cl(c.portrait,800)||'';$('pt').hidden=!c.portrait;$('abw').classList.toggle('p',!!c.portrait);$('about').hidden=!c.aboutX&&!c.portrait;$('ft').textContent=c.foot;
+$('st').textContent=c.songsT;$('at').textContent=c.albumsT;$('abt').textContent=c.aboutT;$('abx').textContent=c.aboutX;$('pt').src=cl(c.portrait,800)||'';$('pt').hidden=!c.portrait;$('abw').classList.toggle('p',!!c.portrait);$('about').hidden=!c.aboutX&&!c.portrait;
 $('hero').style.backgroundImage=c.hero?`linear-gradient(#0003,#030303 96%),url("${cl(c.hero,innerWidth<700?900:1800)}")`:'';
 const h=c.ig.replace('@','');$('ign').href=$('ig2').href='https://instagram.com/'+h;$('igt').textContent=$('ig2t').textContent='@'+h;
 const w=String(c.wa||'').replace(/\D/g,'');$('wa').hidden=!w;if(w)$('wa').href='https://wa.me/'+w;
@@ -256,4 +255,3 @@ document.addEventListener('pointerout',e=>{const c=e.target.closest?.('.tl');if(
 onValue(ref(db,'ZEKISCC'),s=>{D={config:{},songs:{},albums:{},photos:{},videos:{},shows:{},...s.val()};render();setTimeout(()=>$('ld').classList.add('off'),900)});
 setTimeout(()=>$('ld').classList.add('off'),3500);
 </script></body></html>
-
