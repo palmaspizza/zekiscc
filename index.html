@@ -135,7 +135,7 @@ footer{padding:40px 5% calc(110px + env(safe-area-inset-bottom))}
 }
 @media(max-width:380px){.pill{font-size:.85rem;padding:8px 12px}#tag{font-size:.78rem}#cdn b{font-size:1.8rem}}
 @media(hover:none){.card:hover .im{box-shadow:0 0 0 1.5px #ffffff1a}.card:hover img{transform:none}.pill:hover,.cta:hover,.bt:hover,.show:hover,.gal img:hover{transform:none}.trk:hover{padding-left:6px}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}.dev em{font-style:normal;background:#25d366;color:#000;font-weight:700;padding:3px 10px;border-radius:99px;font-size:.75rem}
 </style></head><body>
 <svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z" fill="currentColor"/></symbol>
@@ -169,7 +169,12 @@ footer{padding:40px 5% calc(110px + env(safe-area-inset-bottom))}
 <section id="sw"><h2 id="swT"></h2><div id="swl"></div></section>
 <section id="gl"><h2 id="glT"></h2><div class="gal" id="gll"></div></section>
 <section id="about"><h2 id="abt"></h2><div class="abw" id="abw"><img id="pt" alt="" hidden><p id="abx"></p></div></section>
-<footer><div class="fn big" id="fn"></div><a id="ig2" class="pill" target="_blank" rel="noopener"><svg class="ic"><use href="#i-ig"/></svg><span id="ig2t"></span></a><a id="tkp" class="pill" target="_blank" rel="noopener" hidden><svg class="ic"><use href="#i-tk"/></svg>TikTok</a><a id="mlp" class="pill" hidden><svg class="ic"><use href="#i-ml"/></svg>Contacto</a><a class="pill" href="javascript:share(document.title)"><svg class="ic"><use href="#i-sh"/></svg>Compartir</a><p id="ft" style="color:#777;margin-top:10px"></p></footer>
+<footer><div class="fn big" id="fn"></div><a id="ig2" class="pill" target="_blank" rel="noopener"><svg class="ic"><use href="#i-ig"/></svg><span id="ig2t"></span></a><a id="tkp" class="pill" target="_blank" rel="noopener" hidden><svg class="ic"><use href="#i-tk"/></svg>TikTok</a><a id="mlp" class="pill" hidden><svg class="ic"><use href="#i-ml"/></svg>Contacto</a><a class="pill" href="javascript:share(document.title)"><svg class="ic"><use href="#i-sh"/></svg>Compartir</a><a class="dev" href="https://wa.me/56954998792" target="_blank" rel="noopener">
+  <span>Hecho por</span>
+  <img src="logopalmacodes.png" alt="Palma Codes" loading="lazy">
+  <b>Palma Codes · Desarrollador</b>
+  <em>Contactar</em>
+</a></footer>
 <div id="bar" onclick="song(window.lastId)"><span id="bt"></span><svg class="ic"><use href="#i-play"/></svg></div>
 <div id="L"></div>
 <script type="module">
@@ -250,3 +255,4 @@ document.addEventListener('pointerout',e=>{const c=e.target.closest?.('.tl');if(
 onValue(ref(db,'ZEKISCC'),s=>{D={config:{},songs:{},albums:{},photos:{},videos:{},shows:{},...s.val()};render();setTimeout(()=>$('ld').classList.add('off'),900)});
 setTimeout(()=>$('ld').classList.add('off'),3500);
 </script></body></html>
+
