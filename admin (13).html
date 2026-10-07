@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><title>ZEKI · Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--a:#e1002d;--b:#f4f4f4}*{box-sizing:border-box;margin:0;padding:0}
+body{background:#080808;color:#fff;font:500 1rem 'Space Grotesk',Arial,sans-serif;padding:0 0 90px}
+h1,h2,h3{font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase}
+header{position:sticky;top:0;z-index:20;background:#000;border-bottom:4px solid var(--a);padding:calc(10px + env(safe-area-inset-top)) 4% 10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+header h1{font-size:1.5rem}
+.btn{background:var(--b);color:#000;border:0;padding:11px 16px;font:400 1rem Anton;text-transform:uppercase;cursor:pointer;box-shadow:3px 3px 0 var(--a)}
+.btn.g{background:#222;color:#fff;box-shadow:none}.btn.r{background:var(--a);color:#fff;box-shadow:none}
+.tabs{display:flex;overflow-x:auto;background:#111;position:sticky;top:62px;z-index:19}.tabs button{flex:1 0 auto;padding:14px 16px;background:0;border:0;color:#999;font:400 1.05rem Anton;text-transform:uppercase;cursor:pointer;border-bottom:4px solid transparent}
+.tabs .on{color:var(--b);border-color:var(--b)}
+main{max-width:760px;margin:auto;padding:18px 4%}
+label{display:block;margin:14px 0 5px;color:#bbb;font-size:.85rem;font-weight:700}
+input,textarea,select{width:100%;padding:12px;background:#151515;border:2px solid #333;color:#fff;font:inherit}
+input:focus,textarea:focus,select:focus{outline:0;border-color:var(--b)}input[type=color]{height:48px;padding:3px}
+textarea{min-height:110px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.it{display:flex;gap:12px;align-items:center;background:#121212;border:2px solid #222;padding:10px;margin-bottom:10px}
+.it img,.it .t{width:58px;height:58px;object-fit:cover;background:#222;flex:none;display:grid;place-items:center;font:1.6rem Anton;color:var(--a)}
+.it div{flex:1;min-width:0}.it b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.it small{color:#888}
+.it button{padding:9px 12px}
+.prev{width:100%;max-height:170px;object-fit:cover;margin-top:8px;display:block}
+#M{position:fixed;inset:0;background:#000e;display:none;z-index:100;align-items:flex-start;justify-content:center;overflow:auto;padding:14px}#M.on{display:flex}
+.box{background:#101010;border:2px solid var(--a);width:100%;max-width:560px;padding:18px;box-shadow:8px 8px 0 var(--b);margin:auto}
+.box.pv{max-width:1000px;height:92vh;padding:8px;display:flex;flex-direction:column}.pv iframe{flex:1;border:0;background:#000}
+.bar{display:flex;gap:10px;margin-top:20px}.bar .btn{flex:1}
+#login{position:fixed;inset:0;background:#000;z-index:300;display:grid;place-items:center;padding:20px;text-align:center}
+#login h1{font-size:4rem;text-shadow:3px 0 var(--a),-3px 0 var(--b)}
+.pre{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}.pre i{width:52px;height:34px;border:2px solid #444;cursor:pointer}
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.pg div{position:relative}.pg img{width:100%;aspect-ratio:1;object-fit:cover;display:block}.pg .btn{position:absolute;top:4px;right:4px;padding:5px 9px}
+#toast{position:fixed;bottom:20px;left:50%;translate:-50% 0;background:#1db954;color:#000;padding:12px 22px;font-weight:700;z-index:400;display:none}
+</style></head><body>
+<div id="login"><div style="max-width:320px;width:100%"><h1>ZEKI</h1><p style="color:#888;margin-bottom:16px">Panel de administrador</p><input id="pw" type="password" placeholder="Contraseña" style="text-align:center" onkeydown="if(event.key==='Enter')enter()"><button class="btn" style="width:100%;margin-top:12px" onclick="enter()">Entrar</button></div></div>
+<header><h1>Panel · <span style="color:var(--b)">ZEKI</span></h1><button class="btn" onclick="preview()">👁 Ver página</button></header>
+<div class="tabs"><button data-t="cfg" class="on">Página</button><button data-t="songs">Temas</button><button data-t="track">Canción</button><button data-t="albums">Álbumes</button><button data-t="videos">Videos</button><button data-t="photos">Fotos</button><button data-t="shows">Shows</button></div>
+<main id="main"></main>
+<div id="M"></div><div id="toast"></div>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {getDatabase,ref,onValue,set,push,remove} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+const db=getDatabase(initializeApp({apiKey:"AIzaSyCuHSlv7WEmoEWh96rWWCnTi7AwgN-7Hd4",authDomain:"tatuajes-e7c8f.firebaseapp.com",databaseURL:"https://tatuajes-e7c8f-default-rtdb.firebaseio.com/",projectId:"tatuajes-e7c8f"}));
+const R='zekiscc',PASS='zeki1234'; // <-- CAMBIA LA CONTRASEÑA AQUÍ
+const $=i=>document.getElementById(i);let D={config:{},songs:{},albums:{},photos:{},videos:{},shows:{}},tab='cfg',pic={};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toast=t=>{const e=$('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',2000)};
+window.enter=()=>{if($('pw').value===PASS){sessionStorage.z=1;$('login').hidden=true}else{$('pw').value='';$('pw').placeholder='Incorrecta'}};
+if(sessionStorage.z)$('login').hidden=true;
+// Modales con botón "atrás" del celular
+const S=[];const M=$('M');
+const sh=()=>{const h=S[S.length-1];M.classList.toggle('on',!!h);M.innerHTML=h||''};
+const open=h=>{S.push(h);history.pushState(1,'');sh()};
+addEventListener('popstate',()=>{S.pop();sh()});
+window.back=()=>history.back();
+// Imagen -> JPEG comprimido
+const shrink=(f,max)=>new Promise(ok=>{const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.82))};i.src=r.result};r.readAsDataURL(f)});
+window.pick=async(inp,key,max)=>{const f=inp.files[0];if(!f)return;pic[key]=await shrink(f,max);$('pv_'+key).src=pic[key];$('pv_'+key).hidden=false};
+const yid=u=>{u=(u||'').trim();if(!u)return'';const m=u.match(/(?:v=|youtu\.be\/|embed\/|shorts\/|live\/)([\w-]{11})/);return m?m[1]:(/^[\w-]{11}$/.test(u)?u:'')};
+const F=[['name','Nombre artístico'],['tag','Etiqueta sobre el nombre'],['slogan','Slogan'],['btn','Texto del botón principal'],['mq','Texto de la cinta que se mueve'],['latestT','Título "Último lanzamiento"'],['songsT','Título sección temas'],['albumsT','Título sección álbumes'],['aboutT','Título biografía'],['aboutX','Biografía (opcional)','t'],['ig','Instagram (sin @)'],['wa','WhatsApp para contrataciones, con código país (opcional)'],['tiktok','TikTok (sin @, opcional)'],['email','Email de contrataciones (opcional)'],['cdT','Título de la cuenta regresiva'],['cdD','Fecha del próximo lanzamiento (cuenta regresiva, opcional)','d'],['videosT','Título sección videos'],['galleryT','Título sección fotos'],['showsT','Título sección shows'],['foot','Texto del pie de página']];
+const PRE=[['#e1002d','#f4f4f4'],['#00cfff','#ffffff'],['#d4af37','#ffffff'],['#ff5a00','#ffe9d6'],['#ff2e88','#00e5ff'],['#ffffff','#e1002d']];
+const alb=()=>Object.entries(D.albums);
+const songs=()=>Object.entries(D.songs).map(([id,s])=>({id,...s})).sort((a,b)=>(b.date||0)-(a.date||0));
+function draw(){const c=D.config;document.documentElement.style.setProperty('--a',c.cA||'#e1002d');document.documentElement.style.setProperty('--b',c.cB||'#f4f4f4');
+document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));let h='';
+if(tab==='cfg'){h=`<p style="background:#151515;padding:12px;border-left:5px solid var(--b)">👁 Visitas a la página: <b>${D.views||0}</b></p><h2 style="margin-top:12px">Textos y colores</h2>`+F.map(([k,l,t])=>`<label>${l}</label>${t==='t'?`<textarea data-k="${k}">${esc(c[k])}</textarea>`:`<input ${t==='d'?'type="datetime-local" ':''}data-k="${k}" value="${esc(c[k])}" placeholder="(usa el texto por defecto)">`}`).join('')+
+`<label>Colores (rudos)</label><div class="row"><input type="color" id="cA" value="${c.cA||'#e1002d'}"><input type="color" id="cB" value="${c.cB||'#f4f4f4'}"></div><div class="pre">${PRE.map(p=>`<i style="background:linear-gradient(90deg,${p[0]} 50%,${p[1]} 50%)" onclick="cl('${p[0]}','${p[1]}')"></i>`).join('')}</div>
+<label>Portada principal (foto de fondo)</label><input type="file" accept="image/*" onchange="pick(this,'hero',1600)"><img id="pv_hero" class="prev" src="${esc(c.hero||'')}" ${c.hero?'':'hidden'}>${c.hero?'<button class="btn g" style="margin-top:8px" onclick="noImg(\'hero\')">Quitar portada</button>':''}
+<label>Foto del artista (sección "Quién es")</label><input type="file" accept="image/*" onchange="pick(this,'portrait',900)"><img id="pv_portrait" class="prev" src="${esc(c.portrait||'')}" ${c.portrait?'':'hidden'}>${c.portrait?'<button class="btn g" style="margin-top:8px" onclick="noImg(\'portrait\')">Quitar foto</button>':''}
+<div class="bar"><button class="btn" onclick="saveCfg()">💾 Guardar cambios</button></div>`}
+if(tab==='songs'){h=`<h2>Temas</h2><button class="btn" style="width:100%;margin-bottom:14px" onclick="editSong()">+ Nuevo tema</button>`+(songs().map(s=>{const im=s.cover||(s.yt?`https://i.ytimg.com/vi/${s.yt}/default.jpg`:'');return`<div class="it">${im?`<img src="${esc(im)}">`:`<span class="t">${esc(s.title[0])}</span>`}<div><b>${esc(s.title)}</b><small>${esc(D.albums[s.album]?.name||'Sencillo')}</small></div><button class="btn g" onclick="editSong('${s.id}')">✎</button><button class="btn r" onclick="del('songs','${s.id}')">✕</button></div>`}).join('')||'<p style="color:#888">Aún no hay temas.</p>')}
+if(tab==='albums'){h=`<h2>Álbumes</h2><button class="btn" style="width:100%;margin-bottom:14px" onclick="editAlb()">+ Nuevo álbum</button>`+(alb().map(([id,a])=>`<div class="it">${a.cover?`<img src="${esc(a.cover)}">`:`<span class="t">${esc(a.name[0])}</span>`}<div><b>${esc(a.name)}</b><small>${esc(a.year||'')}</small></div><button class="btn g" onclick="editAlb('${id}')">✎</button><button class="btn r" onclick="del('albums','${id}')">✕</button></div>`).join('')||'<p style="color:#888">Aún no hay álbumes.</p>')}
+if(tab==='track'){const k=D.track;h=`<h2>Canción de bienvenida</h2><p style="color:#aaa;line-height:1.5">Un solo MP3 que aparece con reproductor y visualizador al entrar a la página. Máximo 6 MB (exporta a 128 kbps para que quepa una canción completa).</p>${k?`<div class="it" style="margin-top:14px"><span class="t">♪</span><div><b>${esc(k.title)}</b><small>${(k.size/1e6).toFixed(1)} MB · activa</small></div><button class="btn r" onclick="delTrack()">✕</button></div>`:''}<label>Nombre que se muestra</label><input id="tt" value="${esc(k?.title)}" placeholder="Nombre de la canción"><label>${k?'Reemplazar MP3 (opcional)':'Archivo MP3'}</label><input id="tf" type="file" accept="audio/*"><div class="bar"><button class="btn" onclick="saveTrack()">💾 Guardar canción</button></div>`}
+if(tab==='videos'){h=`<h2>Videoclips</h2><button class="btn" style="width:100%;margin-bottom:14px" onclick="editVid()">+ Nuevo video</button>`+(Object.entries(D.videos).reverse().map(([id,v])=>`<div class="it"><img src="https://i.ytimg.com/vi/${esc(v.yt)}/default.jpg"><div><b>${esc(v.title)}</b><small>YouTube</small></div><button class="btn r" onclick="del('videos','${id}')">✕</button></div>`).join('')||'<p style="color:#888">Sin videos.</p>')}
+if(tab==='photos'){h=`<h2>Fotos</h2><label class="btn" style="display:block;text-align:center;margin:0 0 14px">+ Subir fotos (varias a la vez)<input type="file" accept="image/*" multiple hidden onchange="addPhotos(this)"></label><div class="pg">${Object.entries(D.photos).reverse().map(([id,p])=>`<div><img src="${esc(p.src)}"><button class="btn r" onclick="del('photos','${id}')">✕</button></div>`).join('')}</div>`}
+if(tab==='shows'){h=`<h2>Shows y fechas</h2><button class="btn" style="width:100%;margin-bottom:14px" onclick="editShow()">+ Nueva fecha</button>`+(Object.entries(D.shows).sort((a,b)=>a[1].date.localeCompare(b[1].date)).map(([id,s])=>`<div class="it"><span class="t" style="font-size:.9rem">${esc(s.date.slice(5))}</span><div><b>${esc(s.city)}</b><small>${esc(s.venue||'')}</small></div><button class="btn r" onclick="del('shows','${id}')">✕</button></div>`).join('')||'<p style="color:#888">Sin fechas. Los shows pasados se ocultan solos en la página.</p>')}
+$('main').innerHTML=h}
+document.querySelector('.tabs').onclick=e=>{if(e.target.dataset.t){tab=e.target.dataset.t;draw()}};
+window.cl=(a,b)=>{$('cA').value=a;$('cB').value=b};
+window.noImg=async k=>{await set(ref(db,R+'/config/'+k),null);toast('Quitada')};
+window.saveCfg=async()=>{const o={...D.config};document.querySelectorAll('[data-k]').forEach(e=>o[e.dataset.k]=e.value.trim());o.cA=$('cA').value;o.cB=$('cB').value;if(pic.hero)o.hero=pic.hero;if(pic.portrait)o.portrait=pic.portrait;pic={};await set(ref(db,R+'/config'),o);toast('✔ Guardado')};
+window.editSong=(id)=>{pic={};const s=id?D.songs[id]:{};
+open(`<div class="box"><h2>${id?'Editar':'Nuevo'} tema</h2><label>Título *</label><input id="f_t" value="${esc(s.title)}"><label>Link de YouTube (opcional)</label><input id="f_y" value="${s.yt?'https://youtu.be/'+s.yt:''}" placeholder="https://youtu.be/..."><label>Link de Spotify (opcional)</label><input id="f_s" value="${esc(s.spotify)}"><label>Link de SoundCloud (opcional)</label><input id="f_c" value="${esc(s.soundcloud)}"><label>Álbum (opcional)</label><select id="f_a"><option value="">Sencillo</option>${alb().map(([k,a])=>`<option value="${k}" ${s.album===k?'selected':''}>${esc(a.name)}</option>`).join('')}</select><label>Portada (si no subes una, usa la de YouTube)</label><input type="file" accept="image/*" onchange="pick(this,'cover',800)"><img id="pv_cover" class="prev" src="${esc(s.cover||'')}" ${s.cover?'':'hidden'}><div class="bar"><button class="btn g" onclick="back()">Cancelar</button><button class="btn" onclick="saveSong('${id||''}')">Guardar</button></div></div>`)};
+window.saveSong=async id=>{const t=$('f_t').value.trim();if(!t)return alert('Falta el título');const o={...(id?D.songs[id]:{date:Date.now()}),title:t,yt:yid($('f_y').value),spotify:$('f_s').value.trim(),soundcloud:$('f_c').value.trim(),album:$('f_a').value};if(pic.cover)o.cover=pic.cover;
+await(id?set(ref(db,`${R}/songs/${id}`),o):set(push(ref(db,R+'/songs')),o));back();toast('✔ Tema guardado')};
+window.editAlb=id=>{pic={};const a=id?D.albums[id]:{};
+open(`<div class="box"><h2>${id?'Editar':'Nuevo'} álbum</h2><label>Nombre *</label><input id="f_n" value="${esc(a.name)}"><label>Año (opcional)</label><input id="f_yr" value="${esc(a.year)}"><label>Portada</label><input type="file" accept="image/*" onchange="pick(this,'cover',800)"><img id="pv_cover" class="prev" src="${esc(a.cover||'')}" ${a.cover?'':'hidden'}><div class="bar"><button class="btn g" onclick="back()">Cancelar</button><button class="btn" onclick="saveAlb('${id||''}')">Guardar</button></div></div>`)};
+window.saveAlb=async id=>{const n=$('f_n').value.trim();if(!n)return alert('Falta el nombre');const o={...(id?D.albums[id]:{}),name:n,year:$('f_yr').value.trim()};if(pic.cover)o.cover=pic.cover;
+await(id?set(ref(db,`${R}/albums/${id}`),o):set(push(ref(db,R+'/albums')),o));back();toast('✔ Álbum guardado')};
+window.editVid=()=>open(`<div class="box"><h2>Nuevo video</h2><label>Título *</label><input id="v_t"><label>Link de YouTube *</label><input id="v_y" placeholder="https://youtu.be/..."><div class="bar"><button class="btn g" onclick="back()">Cancelar</button><button class="btn" onclick="saveVid()">Guardar</button></div></div>`);
+window.saveVid=async()=>{const y=yid($('v_y').value),t=$('v_t').value.trim();if(!y||!t)return alert('Falta título o link válido de YouTube');await set(push(ref(db,R+'/videos')),{title:t,yt:y});back();toast('✔ Video guardado')};
+window.addPhotos=async i=>{toast('Subiendo...');for(const f of i.files){await set(push(ref(db,R+'/photos')),{src:await shrink(f,1200),date:Date.now()})}toast('✔ Fotos subidas')};
+window.editShow=()=>open(`<div class="box"><h2>Nueva fecha</h2><label>Fecha *</label><input type="date" id="s_d"><label>Ciudad *</label><input id="s_c"><label>Lugar (opcional)</label><input id="s_v"><label>Link de entradas (opcional)</label><input id="s_l"><div class="bar"><button class="btn g" onclick="back()">Cancelar</button><button class="btn" onclick="saveShow()">Guardar</button></div></div>`);
+window.saveShow=async()=>{const d=$('s_d').value,c=$('s_c').value.trim();if(!d||!c)return alert('Falta fecha o ciudad');await set(push(ref(db,R+'/shows')),{date:d,city:c,venue:$('s_v').value.trim(),link:$('s_l').value.trim()});back();toast('✔ Fecha guardada')};
+window.saveTrack=async()=>{const f=$('tf').files[0],t=$('tt').value.trim()||'Mi canción';if(!f&&!D.track)return alert('Elige un MP3');
+if(f){if(f.size>6e6)return alert('Pesa más de 6 MB. Exporta el MP3 a 128 kbps.');toast('Subiendo canción...');const d=await new Promise(r=>{const x=new FileReader();x.onload=()=>r(x.result);x.readAsDataURL(f)});await set(ref(db,'zekiscc_audio/data'),d)}
+await set(ref(db,R+'/track'),{title:t,size:f?f.size:D.track.size});toast('✔ Canción guardada')};
+window.delTrack=async()=>{if(confirm('¿Quitar la canción?')){await remove(ref(db,R+'/track'));await remove(ref(db,'zekiscc_audio'));toast('Quitada')}};
+window.del=async(k,id)=>{if(confirm('¿Eliminar? No se puede deshacer.')){await remove(ref(db,`${R}/${k}/${id}`));toast('Eliminado')}};
+window.preview=()=>open(`<div class="box pv"><div style="display:flex;gap:8px;margin-bottom:8px"><button class="btn g" onclick="back()">← Volver al panel</button><button class="btn" onclick="document.getElementById('pf').src='index.html?'+Date.now()">↻ Recargar</button></div><iframe id="pf" src="index.html?${Date.now()}"></iframe></div>`);
+onValue(ref(db,R),s=>{D={config:{},songs:{},albums:{},photos:{},videos:{},shows:{},...s.val()};if(!S.length||true)draw()});
+</script></body></html>
